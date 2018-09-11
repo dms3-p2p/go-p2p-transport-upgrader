@@ -6,13 +6,13 @@ import (
 	"fmt"
 	"net"
 
-	ss "github.com/libp2p/go-conn-security"
-	pnet "github.com/libp2p/go-libp2p-interface-pnet"
-	peer "github.com/libp2p/go-libp2p-peer"
-	transport "github.com/libp2p/go-libp2p-transport"
-	filter "github.com/libp2p/go-maddr-filter"
-	smux "github.com/libp2p/go-stream-muxer"
-	manet "github.com/multiformats/go-multiaddr-net"
+	ss "github.com/dms3-p2p/go-conn-security"
+	pnet "github.com/dms3-p2p/go-p2p-interface-pnet"
+	peer "github.com/dms3-p2p/go-p2p-peer"
+	transport "github.com/dms3-p2p/go-p2p-transport"
+	filter "github.com/dms3-p2p/go-maddr-filter"
+	smux "github.com/dms3-p2p/go-stream-muxer"
+	manet "github.com/dms3-mft/go-multiaddr-net"
 )
 
 // ErrNilPeer is returned when attempting to upgrade an outbound connection
@@ -31,7 +31,7 @@ type Upgrader struct {
 	Filters   *filter.Filters
 }
 
-// UpgradeListener upgrades the passed multiaddr-net listener into a full libp2p-transport listener.
+// UpgradeListener upgrades the passed multiaddr-net listener into a full dms3-p2p-transport listener.
 func (u *Upgrader) UpgradeListener(t transport.Transport, list manet.Listener) transport.Listener {
 	ctx, cancel := context.WithCancel(context.Background())
 	l := &listener{
@@ -48,7 +48,7 @@ func (u *Upgrader) UpgradeListener(t transport.Transport, list manet.Listener) t
 }
 
 // UpgradeOutbound upgrades the given outbound multiaddr-net connection into a
-// full libp2p-transport connection.
+// full dms3-p2p-transport connection.
 func (u *Upgrader) UpgradeOutbound(ctx context.Context, t transport.Transport, maconn manet.Conn, p peer.ID) (transport.Conn, error) {
 	if p == "" {
 		return nil, ErrNilPeer
@@ -57,7 +57,7 @@ func (u *Upgrader) UpgradeOutbound(ctx context.Context, t transport.Transport, m
 }
 
 // UpgradeInbound upgrades the given inbound multiaddr-net connection into a
-// full libp2p-transport connection.
+// full dms3-p2p-transport connection.
 func (u *Upgrader) UpgradeInbound(ctx context.Context, t transport.Transport, maconn manet.Conn) (transport.Conn, error) {
 	return u.upgrade(ctx, t, maconn, "")
 }
